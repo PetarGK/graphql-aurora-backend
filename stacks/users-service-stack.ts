@@ -19,7 +19,7 @@ export class UsersServiceStack extends cdk.Stack {
 
 
       const createUserLambda = new DbFunction(this, 'users-service-create-user', {
-          entry: '/src/users-service/create-user/lambda',
+          entry: '/src/users-service/lambdas/create-user',
           secretArn: props.secretArn,
           dbClusterArn: props.dbClusterArn,
           dbName: props.dbName
@@ -34,7 +34,7 @@ export class UsersServiceStack extends cdk.Stack {
 
 
       const getUsersLambda = new DbFunction(this, 'users-service-get-users', {
-        entry: '/src/users-service/get-users/lambda',
+        entry: '/src/users-service/lambdas/get-users',
         secretArn: props.secretArn,
         dbClusterArn: props.dbClusterArn,
         dbName: props.dbName
