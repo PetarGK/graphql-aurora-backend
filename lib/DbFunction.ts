@@ -3,10 +3,14 @@ import iam = require("@aws-cdk/aws-iam");
 import { NodejsFunction, NodejsFunctionProps } from "@aws-cdk/aws-lambda-nodejs";
 import { Runtime } from '@aws-cdk/aws-lambda';
 
-interface DbFunctionProps extends NodejsFunctionProps {
+export interface DbSettings {
     dbClusterArn: string,
     secretArn: string,
     dbName: string
+} 
+
+interface DbFunctionProps extends NodejsFunctionProps {
+    settings: DbSettings
 }
 
 export class DbFunction extends NodejsFunction {
@@ -15,9 +19,9 @@ export class DbFunction extends NodejsFunction {
             ...props,
             runtime: Runtime.NODEJS_12_X,
             environment: {
-              SECRET_ARN: props.secretArn,
-              DB_CLUSTER_ARN: props.dbClusterArn,
-              DB_NAME: props.dbName
+              SECRET_ARN: props.settings.secretArn,
+              DB_CLUSTER_ARN: props.settings.dbClusterArn,
+              DB_NAME: props.settings.dbName
             },
             memorySize: 512,
             minify: true
@@ -33,12 +37,12 @@ export class DbFunction extends NodejsFunction {
                     "rds-data:RollbackTransaction", 
                     "rds-data:CommitTransaction"
                     ],
-            resources: [`${props.dbClusterArn}`] 
+            resources: [`${props.settings.dbClusterArn}`] 
         }   
         ))
         this.addToRolePolicy(new iam.PolicyStatement({ 
             actions: ["secretsmanager:GetSecretValue"],
-            resources: [`${props.secretArn}`] 
+            resources: [`${props.settings.secretArn}`] 
         }))  
     }
 }

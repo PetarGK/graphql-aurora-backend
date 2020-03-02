@@ -1,15 +1,10 @@
 import * as cdk from '@aws-cdk/core'
-import { GraphQLApi, MappingTemplate, FieldLogLevel, CfnGraphQLApi } from '@aws-cdk/aws-appsync'
-import { Runtime } from '@aws-cdk/aws-lambda'
-import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs'
-import iam = require("@aws-cdk/aws-iam");
-import { DbFunction } from '../lib/DbFunction';
+import { GraphQLApi, MappingTemplate } from '@aws-cdk/aws-appsync'
+import { DbFunction, DbSettings } from '../lib/DbFunction';
 
 
 interface UsersServiceStackProps extends cdk.StackProps {
-    dbClusterArn: string,
-    secretArn: string,
-    dbName: string,
+    dbSettings: DbSettings
     api: GraphQLApi
 }
 
@@ -19,12 +14,11 @@ export class UsersServiceStack extends cdk.Stack {
 
 
       const createUserLambda = new DbFunction(this, 'users-service-create-user', {
-          entry: '/src/users-service/lambdas/create-user',
-          secretArn: props.secretArn,
-          dbClusterArn: props.dbClusterArn,
-          dbName: props.dbName
+        entry: './src/modules/users/useCases/createUser/lambda.ts',
+        settings: props.dbSettings,
+        functionName: 'users-service-createUser'
       })
-      const createUserDataSource = props.api.addLambdaDataSource("createUser", "Create user", createUserLambda)
+      const createUserDataSource = props.api.addLambdaDataSource("users_service_createUser", "Create user", createUserLambda)
       createUserDataSource.createResolver({
         typeName: "Mutation",
         fieldName: "createUser",
@@ -34,12 +28,11 @@ export class UsersServiceStack extends cdk.Stack {
 
 
       const getUsersLambda = new DbFunction(this, 'users-service-get-users', {
-        entry: '/src/users-service/lambdas/get-users',
-        secretArn: props.secretArn,
-        dbClusterArn: props.dbClusterArn,
-        dbName: props.dbName
+        entry: './src/modules/users/useCases/getUsers/lambda.ts',
+        settings: props.dbSettings,
+        functionName: 'users-service-getUsers'
       })
-      const getUsersDataSource = props.api.addLambdaDataSource("getUsers", "Get users", getUsersLambda)
+      const getUsersDataSource = props.api.addLambdaDataSource("users_service_getUsers", "Get users", getUsersLambda)
       getUsersDataSource.createResolver({
         typeName: "Query",
         fieldName: "getUsers",

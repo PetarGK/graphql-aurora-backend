@@ -5,13 +5,16 @@ schema {
 
 type User {
     id: ID!
-    name: String
-    age: Int
+    firstName: String
+    lastName: String
+    email: String
 }
 
 input CreateUserInput {
-    name: String
-    age: Int
+    firstName: String
+    lastName: String
+    email: String
+    password: String
 }
 
 type Query {
