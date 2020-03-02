@@ -23,7 +23,12 @@ export class UsersServiceStack extends cdk.Stack {
         typeName: "Mutation",
         fieldName: "createUser",
         requestMappingTemplate: MappingTemplate.lambdaRequest("$util.toJson($context.args)"),
-        responseMappingTemplate: MappingTemplate.lambdaResult()
+        responseMappingTemplate: MappingTemplate.fromString(`
+        #if( $context.result && $context.result.errorMessage )
+          $util.error($context.result.errorMessage, $context.result.errorType, $context.result.errorData)
+        #else
+          $util.toJson($context.result)
+        #end`)
       })
 
 

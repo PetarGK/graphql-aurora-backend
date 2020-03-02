@@ -7,7 +7,8 @@ export interface ICognitoService {
 export class CognitoService implements ICognitoService {
 
     async create(user: CognitoUser): Promise<void> {
-        throw new Error("Method not implemented.");
+        
+        return Promise.resolve()
     }
     
 } 

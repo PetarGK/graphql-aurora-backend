@@ -12,7 +12,7 @@ export class Result<T> {
       if (!isSuccess && !error) {
         throw new Error("InvalidOperation: A failing result needs to contain an error message");
       }
-  
+
       this.isSuccess = isSuccess;
       this.isFailure = !isSuccess;
       this.error = error;
@@ -30,16 +30,16 @@ export class Result<T> {
       return this._value;
     }
   
-    public errorValue (): T {
-      return this.error as T;
+    public errorValue (): string {
+      return JSON.stringify(this.error as T);
     }
   
     public static ok<U> (value?: U) : Result<U> {
-      return new Result<U>(true, value = value);
+      return new Result<U>(true, undefined, value);
     }
   
     public static fail<U> (error: any): Result<U> {
-      return new Result<U>(false, error);
+      return new Result<U>(false, error, undefined);
     }
   
     public static combine (results: Result<any>[]) : Result<any> {
@@ -84,7 +84,7 @@ export class Result<T> {
     }
   }
   
-  export const fail = <L, A>(l: L): Either<L, A> => {
+  export const failure = <L, A>(l: L): Either<L, A> => {
     return new Fail(l);
   };
   

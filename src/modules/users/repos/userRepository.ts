@@ -7,11 +7,11 @@ export interface IUserRepo {
 
 export class UserRepo implements IUserRepo {
     public async exists(email: string): Promise<boolean> {
-        return false;
+        return Promise.resolve(true);
     }
 
     public async save(user: User): Promise<User> {
 
-        return user
+        return Promise.resolve(user) 
     }
 }

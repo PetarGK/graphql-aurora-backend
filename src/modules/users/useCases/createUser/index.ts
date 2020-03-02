@@ -1,8 +1,8 @@
 import { CreateUserUseCase } from "./useCase";
 import { userService } from "../../services";
 
-const createUserUseCase = new CreateUserUseCase(userService)
+const useCase = new CreateUserUseCase(userService)
 
 export {
-    createUserUseCase
+    useCase
 }

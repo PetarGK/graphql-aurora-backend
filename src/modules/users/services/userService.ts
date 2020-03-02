@@ -1,6 +1,6 @@
 import { User } from "../entities/user";
 import { IUserRepo } from "../repos/userRepository";
-import { Either, Result, success } from "../../../core/logic/Result";
+import { Either, Result, success, failure } from "../../../core/logic/Result";
 import { GenericAppError } from "../../../core/logic/AppError";
 import { CreateUserErrors } from "../useCases/createUser/errors";
 import { ICognitoService } from "../../../shared/cognito/services/cognitoService";
@@ -30,7 +30,7 @@ export class UserService implements IUserService {
 
         const userAlreadyExists = await this.userRepo.exists(user.email)
         if (userAlreadyExists) {
-            return fail(new CreateUserErrors.AccountAlreadyExists(user.email)) as SaveUserResult;
+            return failure(new CreateUserErrors.AccountAlreadyExists(user.email)) as SaveUserResult;
         }
 
         try {
@@ -39,11 +39,11 @@ export class UserService implements IUserService {
             await this.cognitoService.create({
                 email: user.email
             } as CognitoUser)
-            
+
             return success(Result.ok<User>(dbUser)) as SaveUserResult
         }
         catch(err) {
-            return fail(new GenericAppError.UnexpectedError(err)) as SaveUserResult
+            return failure(new GenericAppError.UnexpectedError(err)) as SaveUserResult
         }
     }
 }
