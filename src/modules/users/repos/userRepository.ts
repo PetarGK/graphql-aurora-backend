@@ -7,7 +7,7 @@ export interface IUserRepo {
 
 export class UserRepo implements IUserRepo {
     public async exists(email: string): Promise<boolean> {
-        return Promise.resolve(true);
+        return Promise.resolve(false);
     }
 
     public async save(user: User): Promise<User> {

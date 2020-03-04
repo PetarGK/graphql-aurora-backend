@@ -22,15 +22,17 @@ export class UsersServiceStack extends cdk.Stack {
       createUserDataSource.createResolver({
         typeName: "Mutation",
         fieldName: "createUser",
-        requestMappingTemplate: MappingTemplate.lambdaRequest("$util.toJson($context.args)"),
+        requestMappingTemplate: MappingTemplate.fromString(`{"version": "2018-05-29", "operation": "Invoke", "payload": $util.toJson($context.args)}`),
         responseMappingTemplate: MappingTemplate.fromString(`
-        #if( $context.result && $context.result.errorMessage )
-          $util.error($context.result.errorMessage, $context.result.errorType, $context.result.errorData)
-        #else
-          $util.toJson($context.result)
-        #end`)
+        #if( $context.result && $context.result.errors )
+          #foreach($error in $context.result.errors)
+              $utils.appendError( $error.errorMessage, $error.errorType )
+          #end
+        #end
+        
+        $utils.toJson( $context.result.data )
+        `)
       })
-
 
       const getUsersLambda = new DbFunction(this, 'users-service-get-users', {
         entry: './src/modules/users/useCases/getUsers/lambda.ts',

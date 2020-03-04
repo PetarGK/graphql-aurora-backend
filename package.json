@@ -30,6 +30,7 @@
     "@aws-cdk/aws-rds": "^1.26.0",
     "@aws-cdk/core": "^1.26.0",
     "@aws-cdk/custom-resources": "^1.26.0",
+    "@hapi/joi": "^17.1.0",
     "data-api-client": "^1.0.1",
     "parcel-bundler": "^1.12.4",
     "source-map-support": "^0.5.16"

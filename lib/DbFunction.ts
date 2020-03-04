@@ -24,7 +24,7 @@ export class DbFunction extends NodejsFunction {
               DB_NAME: props.settings.dbName
             },
             memorySize: 512,
-            minify: true
+            minify: false
         })
       
         this.addToRolePolicy(new iam.PolicyStatement(

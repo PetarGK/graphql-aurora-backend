@@ -5,6 +5,7 @@ import { GenericAppError } from "../../../core/logic/AppError";
 import { CreateUserErrors } from "../useCases/createUser/errors";
 import { ICognitoService } from "../../../shared/cognito/services/cognitoService";
 import { CognitoUser } from "../../../shared/cognito/entities/cognitoUser";
+const Joi = require('@hapi/joi');
 
 export interface IUserService {
     save(user: User): Promise<SaveUserResult>;
@@ -12,6 +13,7 @@ export interface IUserService {
 
 export type SaveUserResult = Either<
     GenericAppError.UnexpectedError |
+    GenericAppError.ValidationErrors |
     CreateUserErrors.AccountAlreadyExists,
     Result<User>
 >
@@ -26,7 +28,17 @@ export class UserService implements IUserService {
     }
 
     public async save(user: User): Promise<SaveUserResult> {
-        // validate attributes
+
+        const schema = Joi.object({
+            firstName: Joi.string().required(),
+            lastName: Joi.string().required(),
+            email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+        })
+
+        const { error } = schema.validate(user)
+        if (error) {
+            return failure(new GenericAppError.ValidationErrors(error)) as SaveUserResult
+        }
 
         const userAlreadyExists = await this.userRepo.exists(user.email)
         if (userAlreadyExists) {
