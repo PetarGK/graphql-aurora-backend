@@ -15,7 +15,8 @@ const database = new DatabaseStack(app, 'DatabaseStack', {
 const dbSettings = {
     dbClusterArn: database.dbClusterArn,
     dbName: database.dbName,
-    secretArn: database.secretArn
+    secretArn: database.secretArn,
+    stage: "dev"
 } as DbSettings
 
 const api = new ApiStack(app, 'ApiStack', {

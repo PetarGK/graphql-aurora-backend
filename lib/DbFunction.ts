@@ -2,11 +2,13 @@ import * as cdk from '@aws-cdk/core'
 import iam = require("@aws-cdk/aws-iam");
 import { NodejsFunction, NodejsFunctionProps } from "@aws-cdk/aws-lambda-nodejs";
 import { Runtime } from '@aws-cdk/aws-lambda';
+import { LogGroup, RetentionDays } from '@aws-cdk/aws-logs';
 
 export interface DbSettings {
     dbClusterArn: string,
     secretArn: string,
-    dbName: string
+    dbName: string,
+    stage: string
 } 
 
 interface DbFunctionProps extends NodejsFunctionProps {
@@ -21,7 +23,8 @@ export class DbFunction extends NodejsFunction {
             environment: {
               SECRET_ARN: props.settings.secretArn,
               DB_CLUSTER_ARN: props.settings.dbClusterArn,
-              DB_NAME: props.settings.dbName
+              DB_NAME: props.settings.dbName,
+              STAGE: props.settings.stage
             },
             memorySize: 512,
             minify: false
@@ -44,5 +47,10 @@ export class DbFunction extends NodejsFunction {
             actions: ["secretsmanager:GetSecretValue"],
             resources: [`${props.settings.secretArn}`] 
         }))  
+
+        new LogGroup(this, `${id}LogGroup`, {
+            logGroupName: `/aws/lambda/${this.functionName}`,
+            retention: RetentionDays.TWO_WEEKS 
+        })         
     }
 }

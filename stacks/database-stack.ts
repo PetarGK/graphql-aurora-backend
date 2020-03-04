@@ -3,7 +3,8 @@ import { IVpc, SecurityGroup, SubnetType, Peer, Port } from '@aws-cdk/aws-ec2';
 import { CfnDBCluster, CfnDBSubnetGroup, DatabaseSecret } from "@aws-cdk/aws-rds";
 import cr = require('@aws-cdk/custom-resources');
 import cfn = require('@aws-cdk/aws-cloudformation');
-import { DbFunction, DbSettings } from '../lib/DbFunction';
+import { DbSettings, DbFunction } from '../lib/DbFunction';
+import { Duration } from '@aws-cdk/core';
 
 interface DatabaseStackProps extends cdk.StackProps {
     vpc: IVpc
@@ -53,7 +54,7 @@ export class DatabaseStack extends cdk.Stack {
   
         storageEncrypted: true,
         deletionProtection: false,
-  
+        enableHttpEndpoint: true,
         backupRetentionPeriod: 14,
   
         scalingConfiguration: {
@@ -71,6 +72,7 @@ export class DatabaseStack extends cdk.Stack {
       const dbMigrationsLambda = new DbFunction(this, 'resources-service-execute-migrations', {
         entry: './src/modules/resources/useCases/executeMigrations/lambda.ts',
         functionName: 'resources-service-executeMigrations',
+        timeout: Duration.seconds(300),
         settings: {
           dbClusterArn: this.dbClusterArn,
           dbName: this.dbName,
@@ -82,8 +84,12 @@ export class DatabaseStack extends cdk.Stack {
         onEventHandler: dbMigrationsLambda
       })
 
-      new cfn.CustomResource(this, 'DbMigrationsResource', { provider: dbMigrationsProvider })
-      
+      new cfn.CustomResource(this, 'DbMigrationsResource', { 
+        provider: dbMigrationsProvider,
+        properties: {
+          version: Math.random()
+        } 
+      })
     }
 }
   
