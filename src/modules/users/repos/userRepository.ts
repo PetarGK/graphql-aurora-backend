@@ -12,6 +12,7 @@ export class UserRepo implements IUserRepo {
 
     public async save(user: User): Promise<User> {
 
+        user.id = "1"
         return Promise.resolve(user) 
     }
 }
