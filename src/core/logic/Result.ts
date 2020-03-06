@@ -3,7 +3,6 @@ export interface ErrorType {
   errorType: string
 } 
 
-
 export class Result<T> {
     public isSuccess: boolean;
     public isFailure: boolean
@@ -26,14 +25,16 @@ export class Result<T> {
       Object.freeze(this);
     }
   
-    public getValue () : { data: T | undefined }  {
+    public getValue () : { data: any }  {
       if (!this.isSuccess) {
         console.log(this.errors,);
         throw new Error("Can't get the value of an error result. Use 'errorValue' instead.")
       } 
   
+      const result: any = this._value
+
       return {
-        data: this._value
+        data: result !== undefined && result.props !== undefined ? result.props : result
       } 
     }
   

@@ -1,7 +1,8 @@
 import { CreateUserUseCase } from "./useCase";
-import { userService } from "../../services";
+import { userRepo } from "../../repos";
+import { cognitoService } from "../../../../shared/cognito/services";
 
-const useCase = new CreateUserUseCase(userService)
+const useCase = new CreateUserUseCase(userRepo, cognitoService)
 
 export {
     useCase

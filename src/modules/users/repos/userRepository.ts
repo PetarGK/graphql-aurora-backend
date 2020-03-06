@@ -1,8 +1,9 @@
-import { User } from "../entities/user";
+import { User } from "../domain/user";
 
 export interface IUserRepo {
     exists(email: string): Promise<boolean>;
-    save(user: User): Promise<User>;
+    create(user: User): Promise<void>;
+    update(user: User): Promise<void>;
 }
 
 export class UserRepo implements IUserRepo {
@@ -10,9 +11,13 @@ export class UserRepo implements IUserRepo {
         return Promise.resolve(false);
     }
 
-    public async save(user: User): Promise<User> {
+    public async create(user: User): Promise<void> {
 
-        user.id = "1"
-        return Promise.resolve(user) 
+        return Promise.resolve() 
     }
+
+    public async update(user: User): Promise<void> {
+
+        return Promise.resolve() 
+    }    
 }

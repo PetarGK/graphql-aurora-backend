@@ -1,5 +1,5 @@
-import { UseCaseError } from "../../../../core/logic/UseCaseError";
 import { Result } from "../../../../core/logic/Result";
+import { UseCaseError } from "../../../../core/logic/UseCaseError";
 
 export namespace CreateUserErrors {
     export class AccountAlreadyExists extends Result<UseCaseError> {

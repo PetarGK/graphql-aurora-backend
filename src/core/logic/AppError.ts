@@ -1,5 +1,5 @@
 
-import { Result } from "./Result";
+import { Result, ErrorType } from "./Result";
 import { UseCaseError } from "./UseCaseError";
 
 export namespace GenericAppError {
@@ -20,17 +20,9 @@ export namespace GenericAppError {
     }
   }
 
-
   export class ValidationErrors extends Result<UseCaseError> {
-    public constructor (error: any) {
-      const errors = error.details.map((i: any) => { 
-        return {
-          errorMessage: i.message,
-          errorType: i.type
-      }})
-
+    public constructor (errors: ErrorType[]) {
       super(false, errors)
     }
   } 
-
 }
