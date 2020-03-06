@@ -8,14 +8,14 @@ import { UniqueEntityID } from "../../../../core/domain/UniqueEntityID";
 import { ICognitoService } from "../../../../shared/cognito/services/cognitoService";
 import { ValidationException } from "../../../../core/logic/ValidationException";
 
-interface CreateUserDTO {
+export interface CreateUserDTO {
     firstName: string;
     lastName: string;
     email: string;
     password: string;
 }
 
-type CreateUserResult = Either<
+export type CreateUserResult = Either<
     GenericAppError.UnexpectedError |
     GenericAppError.ValidationErrors |
     CreateUserErrors.AccountAlreadyExists,

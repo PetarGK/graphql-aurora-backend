@@ -4,11 +4,7 @@ const isEntity = (v: any): v is Entity<any> => {
   return v instanceof Entity;
 };
 
-export interface IEntity {
-  props: object
-}
-
-export abstract class Entity<T extends object> implements IEntity {
+export abstract class Entity<T> {
   protected readonly _id: UniqueEntityID;
   public readonly props: T;
 

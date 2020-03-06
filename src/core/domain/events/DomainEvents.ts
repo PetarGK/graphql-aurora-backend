@@ -2,8 +2,13 @@ import { IDomainEvent } from "./IDomainEvent";
 import { AggregateRoot } from "../AggregateRoot";
 import { UniqueEntityID } from "../UniqueEntityID";
 
+interface IHandlersMap {
+  [key: string]: any
+}
+
+
 export class DomainEvents {
-  private static handlersMap = {};
+  private static handlersMap: IHandlersMap = {};
   private static markedAggregates: AggregateRoot<any>[] = [];
 
   /**
@@ -32,7 +37,7 @@ export class DomainEvents {
   }
 
   private static findMarkedAggregateByID (id: UniqueEntityID): AggregateRoot<any> {
-    let found: AggregateRoot<any> = null;
+    let found: any = null;
     for (let aggregate of this.markedAggregates) {
       if (aggregate.id.equals(id)) {
         found = aggregate;
@@ -54,7 +59,7 @@ export class DomainEvents {
 
   public static register(callback: (event: IDomainEvent) => void, eventClassName: string): void {
     if (!this.handlersMap.hasOwnProperty(eventClassName)) {
-      this.handlersMap[eventClassName] = [];
+      this.handlersMap [eventClassName] = [];
     }
     this.handlersMap[eventClassName].push(callback);
   }

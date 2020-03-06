@@ -36,6 +36,7 @@
     "data-api-client": "^1.0.1",
     "parcel-bundler": "^1.12.4",
     "shallow-equal-object": "^1.1.1",
-    "source-map-support": "^0.5.16"
+    "source-map-support": "^0.5.16",
+    "uuidv4": "^6.0.6"
   }
 }
