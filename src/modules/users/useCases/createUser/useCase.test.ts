@@ -2,7 +2,7 @@ import { CreateUserUseCase, CreateUserDTO } from "./useCase";
 import { userRepo } from "../../repos";
 import { cognitoService } from "../../../../shared/cognito/services";
 
- let useCase: CreateUserUseCase = new CreateUserUseCase(userRepo, cognitoService);
+let useCase: CreateUserUseCase = new CreateUserUseCase(userRepo, cognitoService);
 
 describe('Create User', () => {
   beforeEach(() => {

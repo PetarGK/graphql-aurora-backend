@@ -17,7 +17,7 @@ export interface CreateUserDTO {
 
 export type CreateUserResult = Either<
     GenericAppError.UnexpectedError |
-    GenericAppError.ValidationErrors |
+    //GenericAppError.ValidationErrors |
     CreateUserErrors.AccountAlreadyExists,
     Result<User>
 >

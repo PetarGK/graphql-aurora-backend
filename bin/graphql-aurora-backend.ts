@@ -4,6 +4,7 @@ import * as cdk from '@aws-cdk/core';
 import { CommonStack } from '../stacks/common-stack';
 import { DatabaseStack } from '../stacks/database-stack';
 import { ApiStack } from '../stacks/api-stack';
+import { UsersServiceStack } from '../stacks/users-service-stack'
 import { DbSettings } from '../lib/DbFunction';
 
 const app = new cdk.App();
@@ -19,7 +20,10 @@ const dbSettings = {
     stage: "dev"
 } as DbSettings
 
-const api = new ApiStack(app, 'ApiStack', {
-    dbSettings: dbSettings
+const api = new ApiStack(app, 'ApiStack')
+
+new UsersServiceStack(app, 'UsersServiceStack', {
+    dbSettings: dbSettings,
+    api: api.api
 })
 
